@@ -92,8 +92,8 @@ Parameters:
 
   ############## Ingestion Lambda PARAMATERS ##############
   IngestionScriptURI:
-    Default: 'URI for ingestion script docker image'
-    Description: Name of elastic container repository
+    Default: ''
+    Description: URI for ingestion script docker image
     Type: String
     MinLength: '1'
     MaxLength: '100'
@@ -128,5 +128,6 @@ Resources:
       Handler: index.handler
       Code: !Ref IngestionScriptURI
       Description: Ingestion lambda script
+      MemorySize: 128
     DependsOn:
       - S3
