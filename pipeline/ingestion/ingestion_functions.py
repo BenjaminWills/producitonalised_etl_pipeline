@@ -19,5 +19,19 @@ def ingest_data(s3:S3,bucket_name:str) -> pd.DataFrame:
     return pd.read_csv(f's3://{most_recent_file_name}')
 
 def load_data_to_df(sql:Sqlwrapper,dataframe:pd.DataFrame,schema_name:str,table_name:str) -> bool:
+    """Loads a dataframe to an sql table.
+
+    Parameters
+    ----------
+    sql : Sqlwrapper
+    dataframe : pd.DataFrame
+    schema_name : str
+    table_name : str
+
+    Returns
+    -------
+    bool
+        Response as to whether the function was successful or not
+    """
     response = sql.write_df_to_table(dataframe,schema_name,table_name)
     return response
