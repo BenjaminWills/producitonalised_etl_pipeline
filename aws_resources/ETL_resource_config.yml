@@ -1,0 +1,124 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  ETL Pipeline Example: A simple ETL pipeline that will ingest data placed in an  
+  s3 bucket, into a RDS instance staging schema, using a lambda function
+  running a python script. Once the data has been ingested, a cleaning python script 
+  is activated via a lambda function, and the cleaned data is sent to the RDS instance
+  in the production schema. This is an event driven pipeline, every time a document is 
+  placed in s3 it will run.
+Parameters:
+  ############## DATABASE PARAMATERS ##############
+  DBInstanceID:
+    Default: mydbinstance
+    Description: My database instance
+    Type: String
+    MinLength: '1'
+    MaxLength: '63'
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: >-
+      Must begin with a letter and must not end with a hyphen or contain two
+      consecutive hyphens.
+
+  DBName:
+    Default: MyDatabase
+    Description: PosgreSQL database name
+    Type: String
+    MinLength: '1'
+    MaxLength: '64'
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
+
+  DBInstanceClass:
+    Default: db.t2.micro
+    Description: DB instance class
+    Type: String
+    ConstraintDescription: Must select a valid DB instance type.
+
+  DBUsername:
+    NoEcho: 'true'
+    Description: Username for MySQL database access
+    Type: String
+    MinLength: '1'
+    MaxLength: '16'
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
+
+  DBPassword:
+    NoEcho: 'true'
+    Description: Password for MySQL database access
+    Type: String
+    MinLength: '1'
+    MaxLength: '41'
+    AllowedPattern: '[a-zA-Z0-9]*'
+    ConstraintDescription: must contain only alphanumeric characters.
+
+  ############## ECR PARAMATERS ##############
+
+  ECRName:
+    Default: 'example_ETL_repository'
+    Description: Name of elastic container repository
+    Type: String
+    MinLength: '1'
+    MaxLength: '41'
+    AllowedPattern: '[a-zA-Z0-9]*'
+    ConstraintDescription: must contain only alphanumeric characters.
+
+  ECRPolicy:
+    Version: "2012-10-17"
+      Statement: 
+        - 
+          Sid: AllowPushPull
+          Effect: Allow
+          Principal: 
+            AWS: 
+              - "arn:aws:iam::123456789012:user/ben_admin"
+          Action: 
+            - "ecr:GetDownloadUrlForLayer"
+            - "ecr:BatchGetImage"
+            - "ecr:BatchCheckLayerAvailability"
+            - "ecr:PutImage"
+            - "ecr:InitiateLayerUpload"
+            - "ecr:UploadLayerPart"
+            - "ecr:CompleteLayerUpload"
+  ############## S3 PARAMATERS ##############
+  BucketName:
+    Default: 'ETL INGESTION'
+  ############## Ingestion Lambda PARAMATERS ##############
+  IngestionScriptURI:
+    Default: 'URI for ingestion script docker image'
+    Description: Name of elastic container repository
+    Type: String
+    MinLength: '1'
+    MaxLength: '100'
+    AllowedPattern: '*'
+    ConstraintDescription: Any character.
+
+Resources:
+  DB:
+    Type: 'AWS::RDS::DBInstance'
+    properties:
+      DBInstanceIdentifier: !Ref DBInstanceID
+      AllocatedStorage: "5"
+      DBInstanceClass: db.t3.micro
+      Engine: postgres
+      MasterUsername: !Ref DBUsername
+      MasterUserPassword: !Ref DBPassword
+
+  ECR:
+    type: 'AWS::ECR::Repository'
+    properties:
+      RepositoryName: !Ref ECRName
+      RepositoryPolicyText: !Ref ECRPolicy
+
+  S3:
+    type: 'AWS::S3::Bucket'
+
+  IngestionLambda:
+    type: 'AWS::Lambda::Function'
+    properties:
+      Runtime: python3.9
+      Handler: index.handler
+      Code: !Ref IngestionScriptURI
+      Description: Ingestion lambda script
+    DependsOn:
+      - S3
