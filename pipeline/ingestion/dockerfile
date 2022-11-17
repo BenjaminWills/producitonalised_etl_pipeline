@@ -1,1 +1,9 @@
-FROM python:3.10
+FROM public.ecr.aws/lambda/python:3.8
+
+COPY requirements.txt  .
+RUN  pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
+
+#Assuming that you are running this dockerfile from the top level directory (i.e from within pipeline)
+COPY ingestion/ingest.py ingestion/ingestion_functions.py ../helpers/boto3_s3_helper_class.py ${LAMBDA_TASK_ROOT}
+
+CMD [ "ingestion/ingest.handler" ] 
