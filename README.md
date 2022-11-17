@@ -17,4 +17,6 @@ ParameterKey=KeyPairName,ParameterValue=jenna \
 ParameterKey=DBPassword,ParameterValue=Abcd1234
 ```
 
-Or alternatively you can use Boto3 (AWS SDK for python), in which case the implementation is much more programatic. First you initialise th
+Or alternatively you can use Boto3 (AWS SDK for python), in which case the implementation is much more programatic. Navigate to the `aws_resources/ETL_config.py` file and edit the perameters to your liking, then simply run the file.
+
+
