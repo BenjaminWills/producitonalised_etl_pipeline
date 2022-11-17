@@ -111,7 +111,7 @@ Parameters:
 
 Resources:
   DB:
-    Type: 'AWS::RDS::DBInstance'
+    Type: AWS::RDS::DBInstance
     properties:
       DBInstanceIdentifier: !Ref DBInstanceID
       AllocatedStorage: "5"
@@ -121,7 +121,7 @@ Resources:
       MasterUserPassword: !Ref DBPassword
 
   ECR:
-    type: 'AWS::ECR::Repository'
+    type: AWS::ECR::Repository
     properties:
       RepositoryName: !Ref ECRName
       RepositoryPolicyText: !Ref ECRPolicy
@@ -131,7 +131,7 @@ Resources:
     BucketName: !Ref S3BucketName
 
   IngestionLambda:
-    type: 'AWS::Lambda::Function'
+    type: AWS::Lambda::Function
     properties:
       Runtime: python3.9
       Handler: index.handler
@@ -143,7 +143,7 @@ Resources:
       - ECR
 
   CleaningLambda:
-    type: 'AWS::Lambda::Function'
+    type: AWS::Lambda::Function
       properties:
         Runtime: python3.9
         Handler: index.handler
