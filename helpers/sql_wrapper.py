@@ -1,5 +1,6 @@
 from datetime import datetime as dt
 
+import logging
 import pandas as pd
 import sqlalchemy as SQLA
 
@@ -38,10 +39,10 @@ class Sqlwrapper:
         """
         Will write a pandas df to a postgresql table.
         """
-
-        if table_name == None:
-            table_name = Sqlwrapper.get_readable_date(dt.today())
-
-        self.drop_table(table_name,schema_name)
-        data.to_sql(table_name,self.engine,schema = schema_name,index = False)
-        return "Table successfully added to schema!"
+        try:
+            self.drop_table(table_name,schema_name)
+            data.to_sql(table_name,self.engine,schema = schema_name,index = False)
+            return True
+        except TypeError as e:
+            logging.error(e)
+            return False
