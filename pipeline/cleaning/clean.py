@@ -8,6 +8,8 @@ load_dotenv(override=True)
 
 ACCESS_KEY_ID = os.getenv('ACCESS_KEY_ID')
 SECRET_ACCESS_KEY = os.getenv('SECRET_ACCESS_KEY')
+AWS_REGION = os.getenv('AWS_REGION')
+
 DB_USERNAME  = os.getenv('DB_USERNAME')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_NAME = os.getenv('DB_NAME')
@@ -19,7 +21,8 @@ DB_HOST = os.getenv('DB_HOST')
 def handler(event,context):
     s3 = S3(
         ACCESS_KEY_ID,
-        SECRET_ACCESS_KEY
+        SECRET_ACCESS_KEY,
+        AWS_REGION
     )
     sql = Sqlwrapper(
         DB_USERNAME,
@@ -28,6 +31,4 @@ def handler(event,context):
         DB_PORT,
         DB_NAME
     )
-    
-
     
