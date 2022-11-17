@@ -81,8 +81,15 @@ Parameters:
             - "ecr:UploadLayerPart"
             - "ecr:CompleteLayerUpload"
   ############## S3 PARAMATERS ##############
-  BucketName:
-    Default: 'ETL INGESTION'
+  S3BucketName:
+    Default: 'S3 Bucket'
+    Description: Name of S3 bucket
+    Type: String
+    MinLength: '1'
+    MaxLength: '100'
+    AllowedPattern: '*'
+    ConstraintDescription: Any character.
+
   ############## Ingestion Lambda PARAMATERS ##############
   IngestionScriptURI:
     Default: 'URI for ingestion script docker image'
@@ -112,6 +119,7 @@ Resources:
 
   S3:
     type: 'AWS::S3::Bucket'
+    BucketName: !Ref S3BucketName
 
   IngestionLambda:
     type: 'AWS::Lambda::Function'
