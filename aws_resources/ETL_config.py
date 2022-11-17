@@ -42,6 +42,7 @@ S3_paramaters = [
         'ParameterValue': 'ETL_bucket'
     },
 ]
+
 if __name__ == "__main__":
     cloud_formation = Cloudformation(
         ACCESS_KEY_ID,
@@ -56,5 +57,4 @@ if __name__ == "__main__":
             *lambda_parameters,
             *S3_paramaters
         ],
-
     )
