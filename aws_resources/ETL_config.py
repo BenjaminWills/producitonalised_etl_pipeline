@@ -25,9 +25,13 @@ ECR_parameters = [
     },
 ]
 
-ingestion_lambda_parameters = [
+lambda_parameters = [
     {
         'ParameterKey': 'IngestionScriptURI',
+        'ParameterValue': ''
+    },
+    {
+        'ParameterKey': 'CleaningScriptURI',
         'ParameterValue': ''
     },
 ]

@@ -90,8 +90,17 @@ Parameters:
     AllowedPattern: '*'
     ConstraintDescription: Any character.
 
-  ############## Ingestion Lambda PARAMATERS ##############
+  ############## LAMBDA PARAMATERS ##############
   IngestionScriptURI:
+    Default: ''
+    Description: URI for ingestion script docker image
+    Type: String
+    MinLength: '1'
+    MaxLength: '100'
+    AllowedPattern: '*'
+    ConstraintDescription: Any character.
+
+  CleaningScriptURI:
     Default: ''
     Description: URI for ingestion script docker image
     Type: String
@@ -131,3 +140,14 @@ Resources:
       MemorySize: 128
     DependsOn:
       - S3
+
+  CleaningLambda:
+    type: 'AWS::Lambda::Function'
+      properties:
+        Runtime: python3.9
+        Handler: index.handler
+        Code: !Ref CleaningScriptURI
+        Description: Ingestion lambda script
+        MemorySize: 128
+      DependsOn:
+        - S3
