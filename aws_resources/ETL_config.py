@@ -35,6 +35,13 @@ lambda_parameters = [
         'ParameterValue': ''
     },
 ]
+
+S3_paramaters = [
+    {
+        'ParameterKey': 'S3BucketName',
+        'ParameterValue': 'ETL_bucket'
+    },
+]
 if __name__ == "__main__":
     cloud_formation = Cloudformation(
         ACCESS_KEY_ID,
@@ -45,7 +52,9 @@ if __name__ == "__main__":
         config_path='aws_resources/ETL_resource_config.yml',
         parameters=[
             *DB_parameters,
-            *ECR_parameters
+            *ECR_parameters,
+            *lambda_parameters,
+            *S3_paramaters
         ],
 
     )
