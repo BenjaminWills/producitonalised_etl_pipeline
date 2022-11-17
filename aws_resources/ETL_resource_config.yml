@@ -140,6 +140,7 @@ Resources:
       MemorySize: 128
     DependsOn:
       - S3
+      - ECR
 
   CleaningLambda:
     type: 'AWS::Lambda::Function'
@@ -150,4 +151,5 @@ Resources:
         Description: Ingestion lambda script
         MemorySize: 128
       DependsOn:
-        - S3
+        - IngestionLambda
+        - ECR
