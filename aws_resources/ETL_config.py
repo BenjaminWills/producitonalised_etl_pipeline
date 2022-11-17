@@ -10,11 +10,11 @@ SECRET_ACCESS_KEY = os.getenv('SECRET_ACCESS_KEY')
 DB_parameters = [
     {
         'ParameterKey': 'DBPassword',
-        'ParameterValue': 'benwashere'
+        'ParameterValue': ''
     },
     {
         'ParameterKey': 'DBUsername',
-        'ParameterValue': 'ben'
+        'ParameterValue': ''
     },
 ]
 
